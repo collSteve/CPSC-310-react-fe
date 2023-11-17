@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, DirectValueType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../../shared/query/query-consts";
 import { IDDirectFilter, IDNComposableFilter, IDUnaryComposableFilter, NComposableFilterWithIDChildern, StrictIDAnyFilter } from "../where-query";
 import { Button, Flex, FormControl, FormLabel, Select, Box } from "@chakra-ui/react";
@@ -22,6 +22,11 @@ export function NComposableFilterComponent({ onChange, filter, id }: NComposable
 
     console.log(childernFilters);
 
+    useEffect(()=>{
+        //call function when something change in state
+        onChange({ type: queryType, filters: childernFilters, id: id });
+      },[queryType, childernFilters]);
+
     const renderedChildernFilters = childernFilters.map((childFilter) => {
         if (ALL_DIRECT_QUERY_TYPES.includes(childFilter.type as DirectQueryType)) {
             const filter = childFilter as IDDirectFilter;
@@ -34,8 +39,7 @@ export function NComposableFilterComponent({ onChange, filter, id }: NComposable
                     }
                 });
                 setChildernFilters(newChildernFilters);
-
-                // onChange({ type: queryType, filters: childernFilters, id: id });
+                onChange({ type: queryType, filters: childernFilters, id: id });
             }} />);
         }
         else if (ALL_NNARY_LOGICAL_QUERY_TYPES.includes(childFilter.type as NNaryLogicalQueryType)) {
@@ -49,6 +53,8 @@ export function NComposableFilterComponent({ onChange, filter, id }: NComposable
                     }
                 });
                 setChildernFilters(newChildernFilters);
+                onChange({ type: queryType, filters: childernFilters, id: id });
+
             }} />);
         }
         else if (ALL_UNARY_LOGICAL_QUERY_TYPES.includes(childFilter.type as UnaryLogicalQueryType)) {
@@ -62,6 +68,7 @@ export function NComposableFilterComponent({ onChange, filter, id }: NComposable
                     }
                 });
                 setChildernFilters(newChildernFilters);
+                onChange({ type: queryType, filters: childernFilters, id: id });
             }} />);
         }
 
@@ -123,26 +130,29 @@ export function NComposableFilterComponent({ onChange, filter, id }: NComposable
                         <Button onClick={() => {
                             if (ALL_DIRECT_QUERY_TYPES.includes(addQueryType as DirectQueryType)) {
                                 const newFilter: IDDirectFilter = { type: addQueryType as DirectQueryType, value: 0, valueType: DirectValueType.NUMBER, id: uuid() };
-                                setChildernFilters(prevFilters => {
-                                    return [...prevFilters, newFilter];
-                                });
+                                // setChildernFilters(prevFilters => {
+                                //     return [...prevFilters, newFilter];
+                                // });
+                                setChildernFilters([...childernFilters, newFilter]);
+                                onChange({ type: queryType, filters: childernFilters, id: id });
                             }
                             else if (ALL_NNARY_LOGICAL_QUERY_TYPES.includes(addQueryType as NNaryLogicalQueryType)) {
                                 const newFilter: IDNComposableFilter = { type: addQueryType as NNaryLogicalQueryType, filters: [], id: uuid() };
                                 setChildernFilters(prevFilters => {
                                     return [...prevFilters, newFilter];
                                 });
+                                onChange({ type: queryType, filters: childernFilters, id: id });
                             }
                             else if (ALL_UNARY_LOGICAL_QUERY_TYPES.includes(addQueryType as UnaryLogicalQueryType)) {
                                 const newFilter: IDUnaryComposableFilter = { type: addQueryType as UnaryLogicalQueryType, filter: { type: DirectQueryType.EQ, value: 0, valueType: DirectValueType.NUMBER, id: uuid() }, id: uuid() };
                                 setChildernFilters(prevFilters => {
                                     return [...prevFilters, newFilter];
                                 });
+                                onChange({ type: queryType, filters: childernFilters, id: id });
                             }
 
-                            onChange({ type: queryType, filters: childernFilters, id: id });
                             setAddQueryOpen(false);
-
+                            console.log("add query", childernFilters);
                         }}>Add</Button>
                     </Flex>
                 }

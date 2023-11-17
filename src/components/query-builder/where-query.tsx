@@ -46,18 +46,24 @@ export default function WhereQueryComponent({onChange, filter}: WhereQueryProps)
         const filter = query as IDUnaryComposableFilter;
         renderedChildFilter = (<UnaryComposableFilterComponent key={filter.id} filter={filter} id={filter.id} onChange={(filter) => {
             setQuery(filter);
+            onChange(filter);
+            console.log("where level query changed")
         }} />);
     }
     else if (ALL_DIRECT_QUERY_TYPES.includes(query.type as DirectQueryType)) {
         const filter = query as IDDirectFilter;
         renderedChildFilter = (<DirectFilterComponent key={filter.id} filter={filter} id={filter.id} onChange={(filter) => {
             setQuery(filter);
+            onChange(filter);
+            console.log("where level query changed")
         }} />);
     }
     else if (ALL_NNARY_LOGICAL_QUERY_TYPES.includes(query.type as NNaryLogicalQueryType)) {
         const filter = query as IDNComposableFilter;
         renderedChildFilter = (<NComposableFilterComponent key={filter.id} filter={filter} id={filter.id} onChange={(filter) => {
             setQuery(filter);
+            onChange(filter);
+            console.log("where level query changed")
         }} />);
     } else {
         renderedChildFilter = (<div>Empty Query</div>);

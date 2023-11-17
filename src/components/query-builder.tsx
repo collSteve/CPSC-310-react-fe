@@ -12,11 +12,15 @@ export default function QueryBuilder({ datasetType }: QueryBuilderProps) {
     const [whereQuery, setWhereQuery] = useState<WhereQuery>({ type: EmptyQueryType.EMPTY });
 
     return (<>
+    <p>
+        {JSON.stringify(whereQuery)}
+    </p>
         <DataSetTypeContext.Provider value={datasetType}>
             <h1>Query Builder</h1>
             <h2>Where</h2>
             <WhereQueryComponent onChange={(query) => {
                 setWhereQuery(query);
+                console.log("builder level query changed", query)
             }} filter={whereQuery} />
         </DataSetTypeContext.Provider>
 
