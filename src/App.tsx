@@ -1,12 +1,12 @@
 import './App.css'
-import WhereQueryComponent from './components/query-builder/where-query'
-import { EmptyQueryType } from './shared/query/query-consts'
+import QueryBuilder from './components/query-builder'
+import { DataSetType } from './shared/dataset-consts'
 
 function App() {
 
   return (
     <>
-      <WhereQueryComponent onChange={()=>{}} filter={{type: EmptyQueryType.EMPTY}}/>
+      <QueryBuilder datasetType={DataSetType.Sections}/>
     </>
   )
 }
