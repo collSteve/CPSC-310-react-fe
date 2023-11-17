@@ -2,13 +2,14 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import WhereQuery from './components/query-builder/where-query'
+import WhereQueryComponent from './components/query-builder/where-query'
+import { EmptyQueryType } from './shared/query/query-consts'
 
 function App() {
 
   return (
     <>
-      <WhereQuery/>
+      <WhereQueryComponent onChange={()=>{}} filter={{type: EmptyQueryType.EMPTY}}/>
     </>
   )
 }
