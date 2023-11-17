@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, DirectValueType, EmptyQueryType, LooseAnyQueryType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../shared/query/query-consts";
+import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, DirectValueType, EmptyQueryType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../shared/query/query-consts";
 import DirectFilterComponent from "./where-filters/direct-filter";
 import { NComposableFilterComponent } from "./where-filters/ncomposable-filter";
 import { uuid } from "../../shared/uuid";

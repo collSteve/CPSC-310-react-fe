@@ -33,6 +33,8 @@ export default function DirectFilterComponent({ onChange, filter, id }: DirectFi
             setValue(inputValue);
             setValueType(inputValueType);
         }
+
+        onChange({ type: filterType, value: inputValue, valueType: inputValueType, id: id });
     };
 
     // setValueObj(value as string, valueType);

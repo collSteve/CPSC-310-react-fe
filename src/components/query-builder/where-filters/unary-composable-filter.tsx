@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormLabel, Select, Spacer } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { IDDirectFilter, IDNComposableFilter, IDUnaryComposableFilter, UnaryComposableFilterWithIDChildern } from "../where-query";
 import { useState } from "react";
 import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, DirectValueType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../../shared/query/query-consts";
