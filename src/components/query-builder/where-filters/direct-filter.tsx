@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DirectQueryType, DirectValueType } from "../../../shared/query/query-consts";
 import { isNumericString } from "../../../shared/type-check";
 import { DirectFilter, IDDirectFilter } from "../where-query";
@@ -12,7 +12,7 @@ export interface DirectFilterProps {
 }
 
 export default function DirectFilterComponent({ onChange, filter, id }: DirectFilterProps) {
-    const [filterType, setFilterType] = useState<DirectQueryType>(filter.type);
+    const [queryType, setQueryType] = useState<DirectQueryType>(filter.type);
 
     const [value, setValue] = useState<number | string>(filter.value);
 
@@ -34,8 +34,13 @@ export default function DirectFilterComponent({ onChange, filter, id }: DirectFi
             setValueType(inputValueType);
         }
 
-        onChange({ type: filterType, value: inputValue, valueType: inputValueType, id: id });
+        onChange({ type: queryType, value: inputValue, valueType: inputValueType, id: id });
     };
+
+    useEffect(()=>{
+        //call function when something change in state
+        onChange({ type: queryType, value: value, valueType: valueType, id: id });
+      },[queryType, value, valueType]);
 
     // setValueObj(value as string, valueType);
 
@@ -52,9 +57,9 @@ export default function DirectFilterComponent({ onChange, filter, id }: DirectFi
                     <FormLabel>Query Type</FormLabel>
                     <Select placeholder='query type'
                     width="fit-content"
-                        value={filterType}
+                        value={queryType}
                         onChange={(event) => {
-                            setFilterType(event.target.value as DirectQueryType);
+                            setQueryType(event.target.value as DirectQueryType);
                         }}>
                         {allQueryTypes.map((queryType) => {
                             return (<option key={queryType} value={queryType}>{queryType}</option>);

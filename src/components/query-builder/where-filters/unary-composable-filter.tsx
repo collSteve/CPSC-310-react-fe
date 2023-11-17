@@ -1,6 +1,6 @@
 import { Box, Button, Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import { IDDirectFilter, IDNComposableFilter, IDUnaryComposableFilter, UnaryComposableFilterWithIDChildern } from "../where-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, DirectValueType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../../shared/query/query-consts";
 import DirectFilterComponent from "./direct-filter";
 import { NComposableFilterComponent } from "./ncomposable-filter";
@@ -23,6 +23,11 @@ export default function UnaryComposableFilterComponent({ onChange, filter, id }:
     const [editChildQueryType, setEditChildQueryType] = useState<AnyQueryType>(DirectQueryType.EQ);
 
     let renderedChildFilter = null;
+
+    useEffect(()=>{
+        //call function when something change in state
+        onChange({ type: queryType, filter: childFilter, id: id });
+      },[queryType, childFilter]);
 
     if (ALL_UNARY_LOGICAL_QUERY_TYPES.includes(childFilter.type as UnaryLogicalQueryType)) {
         const filter = childFilter as IDUnaryComposableFilter;
