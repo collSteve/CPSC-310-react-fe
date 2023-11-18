@@ -43,8 +43,8 @@ export default function MultiOrderComponent({ orderValue, onChange }: MultiOrder
         <h3 style={{ alignSelf: "start" }}>Order Keys:</h3>
         <Box w="90%" display="flex" flexDirection="row" justifyContent="start" flexWrap="wrap" boxShadow="base" marginTop="5px">
             {orderValue.keys.map((orderkey, index) => {
-                return (<RemovableItem item={orderkey} onClickRemove={() => {
-                    const newOrderValue = [...orderkey];
+                return (<RemovableItem key={orderkey} item={orderkey} onClickRemove={() => {
+                    const newOrderValue = [...orderValue.keys];
                     newOrderValue.splice(index, 1);
                     onChange({ ...orderValue, keys: newOrderValue });
                 }} />)
@@ -58,8 +58,8 @@ export default function MultiOrderComponent({ orderValue, onChange }: MultiOrder
                 width="fit-content"
                 value={validOrders[0]}
                 onChange={(event) => {
-                    const newOrderValue = [...new Set([...orderValue.keys, event.target.value as string])];
-                    onChange({ ...orderValue, keys: newOrderValue });
+                    const newOrderValue = [...orderValue.keys, event.target.value as string];
+                    onChange({ ...orderValue, keys: [...new Set(newOrderValue)] });
                 }}>
                 {validOrders.map((validOrder) => {
                     const trueOrder = `${datasetContext.datasetPrefix}_${validOrder}`;
