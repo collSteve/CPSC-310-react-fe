@@ -98,7 +98,9 @@ export function NComposableFilterComponent({ onChange, filter, id }: NComposable
                     {renderedChildernFilters.map((childFilter) => {
                         return (<Flex flexDirection="row" key={childFilter?.props.id ?? uuid()}>
                             {childFilter}
-                            <Button onClick={()=>{
+                            <Button 
+                            colorScheme="red"
+                            onClick={()=>{
                                 const newChildernFilters = childernFilters.filter((cfilter) => {
                                     return cfilter.id != childFilter?.props.id;
                                 });

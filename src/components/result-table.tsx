@@ -1,7 +1,9 @@
 import { Box, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 
+export type ValidQueryResult = { [key: string]: string | number }[];
+
 export interface ResultTableProps {
-    data: { [key: string]: string | number }[];
+    data: ValidQueryResult;
 }
 
 export default function ResultTableComponent({ data }: ResultTableProps) {
