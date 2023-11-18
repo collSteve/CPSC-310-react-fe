@@ -31,7 +31,11 @@ export default function QueryBuilder({ datasetContextValue, onQuerySubmit, befor
         </DataSetContext.Provider>
             <Button onClick={()=>{
                 beforeQuerySubmit && beforeQuerySubmit();
-                submitQuery(adeptWhereQueryItem2EBNF(whereQuery)).then((res)=>{
+
+                const query = {
+                    "WHERE": adeptWhereQueryItem2EBNF(whereQuery),
+                }
+                submitQuery(query).then((res)=>{
                     onQuerySubmit(res);
                 })
             }}>Sumbit</Button>
