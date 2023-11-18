@@ -2,12 +2,10 @@ import { Grid, GridItem } from '@chakra-ui/react'
 import './App.css'
 import QueryBuilder from './components/query-builder'
 import { DataSetType } from './shared/dataset-consts'
-import ResultTableComponent, { ValidQueryResult } from './components/result-table'
 import { DataSetContextType } from './contexts/dataset-type-context'
 import { useState } from 'react'
 import { QueryResponseResult } from './service/query-api'
 import QueryResultDisplay from './components/query-result-display'
-import { ResponseStatus } from './service/api-consts'
 
 export enum InitQueryResult {
   Init = "Init",
@@ -59,7 +57,7 @@ function App() {
         </GridItem>
         <GridItem pl='2' area={'queryTable'}>
           {/* <ResultTableComponent data={mockData}/> */}
-          <QueryResultDisplay queryResultRes={queryResultRes}/>
+          <QueryResultDisplay queryResultRes={queryResultRes} loading={queryResultLoading}/>
         </GridItem>
       </Grid>
   )
