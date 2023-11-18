@@ -1,10 +1,11 @@
 import { Box, Button, Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
-import { IDDirectFilter, IDNComposableFilter, IDUnaryComposableFilter, UnaryComposableFilterWithIDChildern } from "../where-query";
-import { useEffect, useState } from "react";
-import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, DirectValueType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../../shared/query/query-consts";
+import { IDDirectFilter, IDNComposableFilter, IDUnaryComposableFilter, UnaryComposableFilterWithIDChildern, defaultDirectFilter } from "../where-query";
+import { useContext, useEffect, useState } from "react";
+import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../../shared/query/query-consts";
 import DirectFilterComponent from "./direct-filter";
 import { NComposableFilterComponent } from "./ncomposable-filter";
 import { uuid } from "../../../shared/uuid";
+import { DataSetContext } from "../../../contexts/dataset-type-context";
 
 export interface UnaryComposableFilterProps {
     id: string;
@@ -21,6 +22,9 @@ export default function UnaryComposableFilterComponent({ onChange, filter, id }:
     const [editChildFilterOpen, setEditChildFilterOpen] = useState<boolean>(false);
 
     const [editChildQueryType, setEditChildQueryType] = useState<AnyQueryType>(DirectQueryType.EQ);
+
+    const datasetContext = useContext(DataSetContext);
+
 
     let renderedChildFilter = null;
 
@@ -87,14 +91,14 @@ export default function UnaryComposableFilterComponent({ onChange, filter, id }:
                 </FormControl>
                 <Button onClick={() => {
                     if (ALL_DIRECT_QUERY_TYPES.includes(editChildQueryType as DirectQueryType)) {
-                        const newFilter: IDDirectFilter = { type: editChildQueryType as DirectQueryType, value: 0, valueType: DirectValueType.NUMBER, id: uuid() };
+                        const newFilter: IDDirectFilter = defaultDirectFilter(uuid(), datasetContext.datasetPrefix, "");
                         setChildFilter(newFilter);
                     }
                     else if (ALL_NNARY_LOGICAL_QUERY_TYPES.includes(editChildQueryType as NNaryLogicalQueryType)) {
                         const newFilter: IDNComposableFilter = { type: editChildQueryType as NNaryLogicalQueryType, filters: [], id: uuid() };
                         setChildFilter(newFilter);
                     } else if (ALL_UNARY_LOGICAL_QUERY_TYPES.includes(editChildQueryType as UnaryLogicalQueryType)) {
-                        const newFilter: IDUnaryComposableFilter = { type: editChildQueryType as UnaryLogicalQueryType, filter: { type: DirectQueryType.EQ, value: 0, valueType: DirectValueType.NUMBER, id: uuid() }, id: uuid() };
+                        const newFilter: IDUnaryComposableFilter = { type: editChildQueryType as UnaryLogicalQueryType, filter: defaultDirectFilter(uuid(), datasetContext.datasetPrefix, ""), id: uuid() };
                         setChildFilter(newFilter);
                     }
 

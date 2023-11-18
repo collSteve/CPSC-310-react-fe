@@ -12,23 +12,23 @@ export enum InitQueryResult {
 }
 
 function App() {
-  const [datasetContext, setDatasetContext] = useState<DataSetContextType>({type:DataSetType.Rooms, datasetPrefix: "rooms"})
+  const [datasetContext, _setDatasetContext] = useState<DataSetContextType>({type:DataSetType.Rooms, datasetPrefix: "rooms"})
   
   const [queryResultRes, setQueryResultRes] = useState<QueryResponseResult | {type: InitQueryResult}>({type: InitQueryResult.Init});
-  const mockData = [
-		{
-			"rooms_shortname": "OSBO",
-			"maxSeats": 442
-		},
-		{
-			"rooms_shortname": "HEBB",
-			"maxSeats": 375
-		},
-		{
-			"rooms_shortname": "LSC",
-			"maxSeats": 350
-		}
-	];
+  // const mockData = [
+	// 	{
+	// 		"rooms_shortname": "OSBO",
+	// 		"maxSeats": 442
+	// 	},
+	// 	{
+	// 		"rooms_shortname": "HEBB",
+	// 		"maxSeats": 375
+	// 	},
+	// 	{
+	// 		"rooms_shortname": "LSC",
+	// 		"maxSeats": 350
+	// 	}
+	// ];
 
   const [queryResultLoading, setQueryResultLoading] = useState<boolean>(false);
 
