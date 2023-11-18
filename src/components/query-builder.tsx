@@ -1,28 +1,31 @@
-import { DataSetTypeContext } from "../contexts/dataset-type-context";
-import { DataSetType } from "../shared/dataset-consts";
+import { DataSetContextType, DataSetContext } from "../contexts/dataset-type-context";
 import WhereQueryComponent, { WhereQuery } from "./query-builder/where-query";
 import { EmptyQueryType } from "../shared/query/query-consts";
 import { useState } from "react";
+import { Flex } from "@chakra-ui/react";
+import { adeptWhereQueryItem2EBNF } from "../shared/query/query-adpter";
 
 export interface QueryBuilderProps {
-    datasetType: DataSetType;
+    datasetContextValue: DataSetContextType;
 }
 
-export default function QueryBuilder({ datasetType }: QueryBuilderProps) {
+export default function QueryBuilder({ datasetContextValue: datasetType }: QueryBuilderProps) {
     const [whereQuery, setWhereQuery] = useState<WhereQuery>({ type: EmptyQueryType.EMPTY });
 
-    return (<>
-    <p>
-        {JSON.stringify(whereQuery)}
-    </p>
-        <DataSetTypeContext.Provider value={datasetType}>
-            <h1>Query Builder</h1>
-            <h2>Where</h2>
-            <WhereQueryComponent onChange={(query) => {
+    return (<Flex flexDirection="column">
+        <div style={{alignSelf: "start"}}>
+            <pre style={{width: "fit-content"}}>
+                {JSON.stringify(adeptWhereQueryItem2EBNF(whereQuery), null, 2)}
+            </pre>
+        </div>
+        <DataSetContext.Provider value={datasetType}>
+            <h2 style={{alignSelf: "start"}}>Query Builder</h2>
+            <h2 style={{alignSelf: "start"}}>Where</h2>
+            <WhereQueryComponent style={{maxHeight: "50%"}}  onChange={(query) => {
                 setWhereQuery(query);
                 console.log("builder level query changed", query)
             }} filter={whereQuery} />
-        </DataSetTypeContext.Provider>
+        </DataSetContext.Provider>
 
-    </>);
+    </Flex>);
 }

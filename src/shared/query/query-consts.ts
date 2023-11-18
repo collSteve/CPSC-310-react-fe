@@ -32,3 +32,10 @@ export const ALL_QUERY_TYPES = [...ALL_DIRECT_QUERY_TYPES, ...ALL_NNARY_LOGICAL_
 export type IDedType = {id: string};
 
 export type LooseAnyQueryType = AnyQueryType | EmptyQueryType;
+
+// EBNF Conts
+export const Room_MFields = ["lat", "lon", "seats"];
+export const Room_SFields = ['fullname',  'shortname', 'number', 'name', 'address', 'type', 'furniture', 'href'];
+
+export const Section_MFields = ["avg", "pass", "fail", "audit", "year"];
+export const Section_SFields = ['dept', 'id', 'instructor', 'title', 'uuid'];

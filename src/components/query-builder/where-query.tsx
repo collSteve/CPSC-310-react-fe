@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, DirectValueType, EmptyQueryType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../shared/query/query-consts";
 import DirectFilterComponent from "./where-filters/direct-filter";
 import { NComposableFilterComponent } from "./where-filters/ncomposable-filter";
 import { uuid } from "../../shared/uuid";
 import { Button, Flex, FormControl, FormLabel, Select } from "@chakra-ui/react";
 import UnaryComposableFilterComponent from "./where-filters/unary-composable-filter";
+import { DataSetContext } from "../../contexts/dataset-type-context";
 
 export type NComposableFilter = {type: NNaryLogicalQueryType, filters: AnyFilter[]};
 
@@ -14,7 +15,7 @@ export type UnaryComposableFilter = {type: UnaryLogicalQueryType, filter: AnyFil
 
 export type UnaryComposableFilterWithIDChildern = {type: UnaryLogicalQueryType, filter: StrictIDAnyFilter};
 
-export type DirectFilter = {type: DirectQueryType, value: string | number, valueType: DirectValueType};
+export type DirectFilter = {type: DirectQueryType, value: string | number, field: string, valueType: DirectValueType, fieldPrefix: string};
 
 export type AnyFilter = NComposableFilter | UnaryComposableFilter | DirectFilter;
 
@@ -32,8 +33,22 @@ export type WhereQuery = StrictIDAnyFilter | EmptyQuery;
 export interface WhereQueryProps {
     onChange: (query: WhereQuery) => void;
     filter: WhereQuery;
+    style?: React.CSSProperties;
 }
-export default function WhereQueryComponent({onChange, filter}: WhereQueryProps) {
+
+export const defaultDirectFilter: (id: string, fieldPrefix: string, field: string) => IDDirectFilter = (id: string, fieldPrefix: string, field = "") =>{
+    return { type: DirectQueryType.EQ, value: 0, valueType: DirectValueType.NUMBER, id: id, field: field, fieldPrefix: fieldPrefix};
+}
+
+export const defaultUnaryComposableFilter: (id: string, fieldPrefix: string, field: string) => IDUnaryComposableFilter = (id: string, fieldPrefix: string, field = "") =>{
+    return { type: UnaryLogicalQueryType.NOT, filter: defaultDirectFilter(uuid(), fieldPrefix, field), id: id};
+}
+
+export const defaultNNaryComposableFilter: (id: string) => IDNComposableFilter = (id: string) =>{
+    return { type: NNaryLogicalQueryType.AND, filters: [], id: id};
+}
+
+export default function WhereQueryComponent({onChange, filter, style}: WhereQueryProps) {
     const [query, setQuery] = useState<WhereQuery>(filter);
 
     const [editChildFilterOpen, setEditChildFilterOpen] = useState<boolean>(false);
@@ -41,6 +56,9 @@ export default function WhereQueryComponent({onChange, filter}: WhereQueryProps)
     const [editChildQueryType, setEditChildQueryType] = useState<AnyQueryType>(DirectQueryType.EQ);
 
     let renderedChildFilter = null;
+
+    const datasetContext = useContext(DataSetContext);
+    
 
     if (ALL_UNARY_LOGICAL_QUERY_TYPES.includes(query.type as UnaryLogicalQueryType)) {
         const filter = query as IDUnaryComposableFilter;
@@ -69,7 +87,7 @@ export default function WhereQueryComponent({onChange, filter}: WhereQueryProps)
         renderedChildFilter = (<div>Empty Query</div>);
     }
 
-    return (<>
+    return (<div style={style}>
         {/* <NComposableFilterComponent id={uuid()} onChange={(filter)=>{}} filter={{type: NNaryLogicalQueryType.AND, filters: [{type:DirectQueryType.EQ,value:0,valueType:DirectValueType.NUMBER,"id":"d97d3467-7f60-bc7c-7c22-6f43bf62aeee"}, 
     {type:DirectQueryType.EQ,value:0,valueType:DirectValueType.NUMBER,"id":"d97d3467-77c22-6f43bf62aeee"}]}}/>
      */}
@@ -96,16 +114,16 @@ export default function WhereQueryComponent({onChange, filter}: WhereQueryProps)
                 </FormControl>
                 <Button onClick={() => {
                     if (ALL_DIRECT_QUERY_TYPES.includes(editChildQueryType as DirectQueryType)) {
-                        const newFilter: IDDirectFilter = { type: editChildQueryType as DirectQueryType, value: 0, valueType: DirectValueType.NUMBER, id: uuid() };
+                        const newFilter: IDDirectFilter = defaultDirectFilter(uuid(), datasetContext.datasetPrefix, "");
                         setQuery(newFilter);
                         onChange(newFilter);
                     }
                     else if (ALL_NNARY_LOGICAL_QUERY_TYPES.includes(editChildQueryType as NNaryLogicalQueryType)) {
-                        const newFilter: IDNComposableFilter = { type: editChildQueryType as NNaryLogicalQueryType, filters: [], id: uuid() };
+                        const newFilter: IDNComposableFilter = defaultNNaryComposableFilter(uuid());
                         setQuery(newFilter);
                         onChange(newFilter);
                     } else if (ALL_UNARY_LOGICAL_QUERY_TYPES.includes(editChildQueryType as UnaryLogicalQueryType)) {
-                        const newFilter: IDUnaryComposableFilter = { type: editChildQueryType as UnaryLogicalQueryType, filter: { type: DirectQueryType.EQ, value: 0, valueType: DirectValueType.NUMBER, id: uuid() }, id: uuid() };
+                        const newFilter: IDUnaryComposableFilter = defaultUnaryComposableFilter(uuid(), datasetContext.datasetPrefix, "");
                         setQuery(newFilter);
                         onChange(newFilter);
                     } else {
@@ -115,5 +133,5 @@ export default function WhereQueryComponent({onChange, filter}: WhereQueryProps)
                     setEditChildFilterOpen(false);
                 }}>Change</Button>
             </Flex>}
-    </>);
+    </div>);
 }   

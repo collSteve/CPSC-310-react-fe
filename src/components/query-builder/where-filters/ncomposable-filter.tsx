@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, DirectValueType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../../shared/query/query-consts";
-import { IDDirectFilter, IDNComposableFilter, IDUnaryComposableFilter, NComposableFilterWithIDChildern, StrictIDAnyFilter } from "../where-query";
+import { useContext, useEffect, useState } from "react";
+import { ALL_DIRECT_QUERY_TYPES, ALL_NNARY_LOGICAL_QUERY_TYPES, ALL_QUERY_TYPES, ALL_UNARY_LOGICAL_QUERY_TYPES, AnyQueryType, DirectQueryType, NNaryLogicalQueryType, UnaryLogicalQueryType } from "../../../shared/query/query-consts";
+import { IDDirectFilter, IDNComposableFilter, IDUnaryComposableFilter, NComposableFilterWithIDChildern, StrictIDAnyFilter, defaultDirectFilter, defaultNNaryComposableFilter, defaultUnaryComposableFilter } from "../where-query";
 import { Button, Flex, FormControl, FormLabel, Select, Box } from "@chakra-ui/react";
 import DirectFilterComponent from "./direct-filter";
 import { uuid } from "../../../shared/uuid";
 import UnaryComposableFilterComponent from "./unary-composable-filter";
+import { DataSetContext } from "../../../contexts/dataset-type-context";
 
 export interface NComposableFilterProps {
     id: string,
@@ -20,7 +21,9 @@ export function NComposableFilterComponent({ onChange, filter, id }: NComposable
     const [addQueryOpen, setAddQueryOpen] = useState<boolean>(false);
     const [addQueryType, setAddQueryType] = useState<AnyQueryType>(DirectQueryType.EQ);
 
-    console.log(childernFilters);
+    const datasetContext = useContext(DataSetContext);
+
+
 
     useEffect(()=>{
         //call function when something change in state
@@ -129,7 +132,7 @@ export function NComposableFilterComponent({ onChange, filter, id }: NComposable
                         </FormControl>
                         <Button onClick={() => {
                             if (ALL_DIRECT_QUERY_TYPES.includes(addQueryType as DirectQueryType)) {
-                                const newFilter: IDDirectFilter = { type: addQueryType as DirectQueryType, value: 0, valueType: DirectValueType.NUMBER, id: uuid() };
+                                const newFilter: IDDirectFilter = defaultDirectFilter(uuid(), datasetContext.datasetPrefix, "");
                                 // setChildernFilters(prevFilters => {
                                 //     return [...prevFilters, newFilter];
                                 // });
@@ -137,14 +140,14 @@ export function NComposableFilterComponent({ onChange, filter, id }: NComposable
                                 onChange({ type: queryType, filters: childernFilters, id: id });
                             }
                             else if (ALL_NNARY_LOGICAL_QUERY_TYPES.includes(addQueryType as NNaryLogicalQueryType)) {
-                                const newFilter: IDNComposableFilter = { type: addQueryType as NNaryLogicalQueryType, filters: [], id: uuid() };
+                                const newFilter: IDNComposableFilter = defaultNNaryComposableFilter(uuid());
                                 setChildernFilters(prevFilters => {
                                     return [...prevFilters, newFilter];
                                 });
                                 onChange({ type: queryType, filters: childernFilters, id: id });
                             }
                             else if (ALL_UNARY_LOGICAL_QUERY_TYPES.includes(addQueryType as UnaryLogicalQueryType)) {
-                                const newFilter: IDUnaryComposableFilter = { type: addQueryType as UnaryLogicalQueryType, filter: { type: DirectQueryType.EQ, value: 0, valueType: DirectValueType.NUMBER, id: uuid() }, id: uuid() };
+                                const newFilter: IDUnaryComposableFilter = defaultUnaryComposableFilter(uuid(), datasetContext.datasetPrefix, "");
                                 setChildernFilters(prevFilters => {
                                     return [...prevFilters, newFilter];
                                 });
