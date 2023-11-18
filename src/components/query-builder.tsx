@@ -9,9 +9,10 @@ import { QueryResponseResult, submitQuery } from "../service/query-api";
 export interface QueryBuilderProps {
     datasetContextValue: DataSetContextType;
     onQuerySubmit: (res: QueryResponseResult) => void;
+    beforeQuerySubmit?: () => void;
 }
 
-export default function QueryBuilder({ datasetContextValue, onQuerySubmit }: QueryBuilderProps) {
+export default function QueryBuilder({ datasetContextValue, onQuerySubmit, beforeQuerySubmit }: QueryBuilderProps) {
     const [whereQuery, setWhereQuery] = useState<WhereQuery>({ type: EmptyQueryType.EMPTY });
 
     return (<Flex flexDirection="column">
@@ -29,6 +30,7 @@ export default function QueryBuilder({ datasetContextValue, onQuerySubmit }: Que
             }} filter={whereQuery} />
         </DataSetContext.Provider>
             <Button onClick={()=>{
+                beforeQuerySubmit && beforeQuerySubmit();
                 submitQuery(adeptWhereQueryItem2EBNF(whereQuery)).then((res)=>{
                     onQuerySubmit(res);
                 })

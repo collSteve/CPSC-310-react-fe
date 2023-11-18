@@ -32,6 +32,8 @@ function App() {
 		}
 	];
 
+  const [queryResultLoading, setQueryResultLoading] = useState<boolean>(false);
+
   return (
       <Grid
         templateAreas={`"header header"
@@ -46,8 +48,13 @@ function App() {
         w={'100vw'}
       >
         <GridItem pl='2' area={'querybuilder'}  overflow="scroll">
-          <QueryBuilder datasetContextValue={datasetContext} onQuerySubmit={(res)=>{
+          <QueryBuilder datasetContextValue={datasetContext} 
+          beforeQuerySubmit={()=>{
+            setQueryResultLoading(true);
+          }}
+          onQuerySubmit={(res)=>{
             setQueryResultRes(res);
+            setQueryResultLoading(false);
           }}/>
         </GridItem>
         <GridItem pl='2' area={'queryTable'}>
