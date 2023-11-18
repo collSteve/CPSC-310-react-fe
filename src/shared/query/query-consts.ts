@@ -39,3 +39,10 @@ export const Room_SFields = ['fullname',  'shortname', 'number', 'name', 'addres
 
 export const Section_MFields = ["avg", "pass", "fail", "audit", "year"];
 export const Section_SFields = ['dept', 'id', 'instructor', 'title', 'uuid'];
+
+export enum OrderDir {
+    UP = "UP",
+    DOWN = "DOWN",
+}
+
+export const ALL_ORDER_DIRS = [OrderDir.UP, OrderDir.DOWN];
