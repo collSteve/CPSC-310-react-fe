@@ -1,4 +1,4 @@
-import { Grid, GridItem } from '@chakra-ui/react'
+import { Grid, GridItem, Box } from '@chakra-ui/react'
 import './App.css'
 import QueryBuilder from './components/query-builder'
 import { DataSetType } from './shared/dataset-consts'
@@ -6,6 +6,8 @@ import { DataSetContextType } from './contexts/dataset-type-context'
 import { useState } from 'react'
 import { QueryResponseResult } from './service/query-api'
 import QueryResultDisplay from './components/query-result-display'
+import DatasetDropdownComponent from "./components/dataset-dropdown.tsx";
+import FileUploader from "./components/file-uploader.tsx";
 
 export enum InitQueryResult {
   Init = "Init",
@@ -29,37 +31,42 @@ function App() {
 	// 		"maxSeats": 350
 	// 	}
 	// ];
+  const mockDatasetNames = ["         ", "d1", "d2", "fortnitebattlepass"];
 
   const [queryResultLoading, setQueryResultLoading] = useState<boolean>(false);
 
   return (
-      <Grid
-        templateAreas={`"header header"
+      <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <FileUploader />
+        <DatasetDropdownComponent datasets={ mockDatasetNames } />
+        <Grid
+            templateAreas={`"header header"
                   "querybuilder queryTable"
                   "querybuilder queryTable"`}
-        gridTemplateRows={'10vh 20vh 65 vh'}
-        gridTemplateColumns={'49vw 49vw'}
-        gap='1'
-        color='blackAlpha.700'
-        fontWeight='bold'
-        h={'100vh'}
-        w={'100vw'}
-      >
-        <GridItem pl='2' area={'querybuilder'}  overflow="scroll">
-          <QueryBuilder datasetContextValue={datasetContext} 
-          beforeQuerySubmit={()=>{
-            setQueryResultLoading(true);
-          }}
-          onQuerySubmit={(res)=>{
-            setQueryResultRes(res);
-            setQueryResultLoading(false);
-          }}/>
-        </GridItem>
-        <GridItem pl='2' area={'queryTable'}>
-          {/* <ResultTableComponent data={mockData}/> */}
-          <QueryResultDisplay queryResultRes={queryResultRes} loading={queryResultLoading}/>
-        </GridItem>
-      </Grid>
+            gridTemplateRows={'10vh 20vh 65 vh'}
+            gridTemplateColumns={'49vw 49vw'}
+            gap='1'
+            color='blackAlpha.700'
+            fontWeight='bold'
+            h={'100vh'}
+            w={'100vw'}
+        >
+          <GridItem pl='2' area={'querybuilder'}  overflow="scroll">
+            <QueryBuilder datasetContextValue={datasetContext}
+                          beforeQuerySubmit={()=>{
+                            setQueryResultLoading(true);
+                          }}
+                          onQuerySubmit={(res)=>{
+                            setQueryResultRes(res);
+                            setQueryResultLoading(false);
+                          }}/>
+          </GridItem>
+          <GridItem pl='2' area={'queryTable'}>
+            {/* <ResultTableComponent data={mockData}/> */}
+            <QueryResultDisplay queryResultRes={queryResultRes} loading={queryResultLoading}/>
+          </GridItem>
+        </Grid>
+      </Box>
   )
 }
 
