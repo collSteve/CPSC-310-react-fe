@@ -36,14 +36,10 @@ function App() {
   const [selectedDataset, setSelectedDataset] = useState<string>("         ");
 
   return (
-      <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <VStack spacing={4}>
-              <AddDatasetComponent />
-              <DatasetDropdownComponent selectedDataset={selectedDataset} setSelectedDataset={setSelectedDataset} />
-          </VStack>
-
         <Grid
-            templateAreas={`"header header"
+            templateAreas={`
+                  "uploadQuery empty"
+                  "QuerySelect empty"
                   "querybuilder queryTable"
                   "querybuilder queryTable"`}
             gridTemplateRows={'10vh 20vh 65 vh'}
@@ -54,6 +50,12 @@ function App() {
             h={'100vh'}
             w={'100vw'}
         >
+          <GridItem area={'uploadQuery'}>
+            <AddDatasetComponent />
+          </GridItem>
+          <GridItem area={'QuerySelect'} justifyItems="center" alignSelf="center">
+            <DatasetDropdownComponent selectedDataset={selectedDataset} setSelectedDataset={setSelectedDataset} />
+          </GridItem>
           <GridItem pl='2' area={'querybuilder'}  overflow="scroll">
             <QueryBuilder datasetContextValue={datasetContext}
                           beforeQuerySubmit={()=>{
@@ -69,7 +71,6 @@ function App() {
             <QueryResultDisplay queryResultRes={queryResultRes} loading={queryResultLoading}/>
           </GridItem>
         </Grid>
-      </Box>
   )
 }
 
