@@ -1,4 +1,4 @@
-import { Grid, GridItem, Box } from '@chakra-ui/react'
+import {Grid, GridItem, Box, VStack} from '@chakra-ui/react'
 import './App.css'
 import QueryBuilder from './components/query-builder'
 import { DataSetType } from './shared/dataset-consts'
@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { QueryResponseResult } from './service/query-api'
 import QueryResultDisplay from './components/query-result-display'
 import DatasetDropdownComponent from "./components/dataset-dropdown.tsx";
-import FileUploader from "./components/file-uploader.tsx";
+import AddDatasetComponent from "./components/adddataset.tsx";
 
 export enum InitQueryResult {
   Init = "Init",
@@ -15,7 +15,7 @@ export enum InitQueryResult {
 
 function App() {
   const [datasetContext, _setDatasetContext] = useState<DataSetContextType>({type:DataSetType.Rooms, datasetPrefix: "rooms"})
-  
+
   const [queryResultRes, setQueryResultRes] = useState<QueryResponseResult | {type: InitQueryResult}>({type: InitQueryResult.Init});
   // const mockData = [
 	// 	{
@@ -31,14 +31,17 @@ function App() {
 	// 		"maxSeats": 350
 	// 	}
 	// ];
-  const mockDatasetNames = ["         ", "d1", "d2", "fortnitebattlepass"];
 
   const [queryResultLoading, setQueryResultLoading] = useState<boolean>(false);
+  const [selectedDataset, setSelectedDataset] = useState<string>("         ");
 
   return (
       <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <FileUploader />
-        <DatasetDropdownComponent datasets={ mockDatasetNames } />
+          <VStack spacing={4}>
+              <AddDatasetComponent />
+              <DatasetDropdownComponent selectedDataset={selectedDataset} setSelectedDataset={setSelectedDataset} />
+          </VStack>
+
         <Grid
             templateAreas={`"header header"
                   "querybuilder queryTable"
