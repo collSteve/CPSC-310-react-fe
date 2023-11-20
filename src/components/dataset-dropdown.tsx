@@ -2,6 +2,8 @@ import {useState} from 'react';
 import {Flex, InputGroup, InputLeftAddon, Select, Button} from "@chakra-ui/react";
 import {getDatasets} from "../service/listdatasets-api.ts";
 import {ResponseStatus} from "../service/api-consts.ts";
+import { DataSetContextType } from '../contexts/dataset-type-context.ts';
+import { DataSetType } from '../shared/dataset-consts.ts';
 
 export interface InsightDataset {
     id: string;
@@ -10,29 +12,35 @@ export interface InsightDataset {
 }
 
 export interface DatasetDropdownProps {
-    selectedDataset: string;
-    setSelectedDataset: (dataset: string) => void;
+    selectedDatasetContext: DataSetContextType;
+    setSelectedDatasetContext(datasetContext: DataSetContextType): void;
 }
 
-export default function DatasetDropdownComponent({selectedDataset, setSelectedDataset}: DatasetDropdownProps) {
-    const [datasetNames, setDatasetNames] = useState<string[]>([]);
+export default function DatasetDropdownComponent({selectedDatasetContext, setSelectedDatasetContext}: DatasetDropdownProps) {
+
+    const [datasetContexts, setDatasetContexts] = useState<DataSetContextType[]>([]);
     // copilot generated
     const refreshDatasets = () => {
         try {
             getDatasets().then((res) => {
                 console.log(res);
                 if (res.type === ResponseStatus.Success && res.data && typeof res.data !== "string") {
-                    let insight_datasets = res.data as InsightDataset[];
-                    let dataset_names = insight_datasets.map((dataset) => dataset.id);
-                    console.log("dataset_names", dataset_names);
-                    setDatasetNames(dataset_names);
+                    const insight_datasets = res.data as InsightDataset[];
+                    insight_datasets.forEach((dataset) => {
+                        if (dataset.kind == "sections") {
+                            setDatasetContexts([...datasetContexts, {type: DataSetType.Sections, datasetPrefix: dataset.id}]);
+                        }
+                        else if (dataset.kind == "rooms") {
+                            setDatasetContexts([...datasetContexts, {type: DataSetType.Rooms, datasetPrefix: dataset.id}]);
+                        }
+                    });
                 } else {
-                    setDatasetNames([]);
+                    setDatasetContexts([]);
                 }
             });
         } catch (e) {
             console.log(e);
-            setDatasetNames([]);
+            setDatasetContexts([]);
         }
     };
 
@@ -42,13 +50,17 @@ export default function DatasetDropdownComponent({selectedDataset, setSelectedDa
                 <InputLeftAddon children={"Selected Dataset for Querying:"} />
                 <Select placeholder='choose a dataset to query from'
                         width="fit-content"
-                        value={selectedDataset}
+                        value={selectedDatasetContext.datasetPrefix}
                         onChange={(event) => {
-                            setSelectedDataset(event.target.value);
+                            datasetContexts.forEach((context) => {
+                                if (context.datasetPrefix == event.target.value) {
+                                    setSelectedDatasetContext(context);
+                                }
+                            })
                         }}>
-                    {datasetNames.map((dataset) => (
-                        <option key={dataset} value={dataset}>
-                            {dataset}
+                    {datasetContexts.map((context) => (
+                        <option key={context.datasetPrefix} value={context.datasetPrefix}>
+                            {`${context.datasetPrefix}, type: <${context.type}>`}
                         </option>
                     ))}
                 </Select>

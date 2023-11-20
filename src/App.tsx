@@ -14,26 +14,11 @@ export enum InitQueryResult {
 }
 
 function App() {
-  const [datasetContext, _setDatasetContext] = useState<DataSetContextType>({type:DataSetType.Rooms, datasetPrefix: "rooms"})
+  const [datasetContext, setDatasetContext] = useState<DataSetContextType>({type:DataSetType.Rooms, datasetPrefix: "rooms"})
 
   const [queryResultRes, setQueryResultRes] = useState<QueryResponseResult | {type: InitQueryResult}>({type: InitQueryResult.Init});
-  // const mockData = [
-	// 	{
-	// 		"rooms_shortname": "OSBO",
-	// 		"maxSeats": 442
-	// 	},
-	// 	{
-	// 		"rooms_shortname": "HEBB",
-	// 		"maxSeats": 375
-	// 	},
-	// 	{
-	// 		"rooms_shortname": "LSC",
-	// 		"maxSeats": 350
-	// 	}
-	// ];
 
   const [queryResultLoading, setQueryResultLoading] = useState<boolean>(false);
-  const [selectedDataset, setSelectedDataset] = useState<string>("         ");
 
   return (
         <Grid
@@ -54,7 +39,10 @@ function App() {
             <AddDatasetComponent />
           </GridItem>
           <GridItem area={'QuerySelect'} justifyItems="center" alignSelf="center">
-            <DatasetDropdownComponent selectedDataset={selectedDataset} setSelectedDataset={setSelectedDataset} />
+            <DatasetDropdownComponent selectedDatasetContext={datasetContext}
+            setSelectedDatasetContext={(context)=>{
+              setDatasetContext(context);
+            }} />
           </GridItem>
           <GridItem pl='2' area={'querybuilder'}  overflow="scroll">
             <QueryBuilder datasetContextValue={datasetContext}

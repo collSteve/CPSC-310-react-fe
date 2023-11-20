@@ -1,4 +1,4 @@
 export enum DataSetType {
-    Rooms,
-    Sections
+    Rooms = "rooms",
+    Sections = "sections",
 }
