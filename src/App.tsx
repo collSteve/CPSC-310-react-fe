@@ -32,7 +32,7 @@ function App() {
             gap='1'
             color='blackAlpha.700'
             fontWeight='bold'
-            h={'100vh'}
+            minHeight={'100vh'}
             w={'100vw'}
         >
           <GridItem area={'uploadQuery'}>
