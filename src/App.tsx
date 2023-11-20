@@ -1,4 +1,4 @@
-import {Grid, GridItem, Box, VStack} from '@chakra-ui/react'
+import {Grid, GridItem } from '@chakra-ui/react'
 import './App.css'
 import QueryBuilder from './components/query-builder'
 import { DataSetType } from './shared/dataset-consts'
