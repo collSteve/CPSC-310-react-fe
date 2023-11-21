@@ -20,6 +20,8 @@ function App() {
 
   const [queryResultLoading, setQueryResultLoading] = useState<boolean>(false);
 
+  const [opHeadings, setOpHeadings] = useState<string[]>([]);
+
   return (
         <Grid
             templateAreas={`
@@ -48,14 +50,17 @@ function App() {
                           beforeQuerySubmit={()=>{
                             setQueryResultLoading(true);
                           }}
-                          onQuerySubmit={(res)=>{
+                          onQuerySubmit={(res, query)=>{
                             setQueryResultRes(res);
                             setQueryResultLoading(false);
+                            if (query) {
+                              setOpHeadings(query.OPTIONS.COLUMNS);
+                            }
                           }}/>
           </GridItem>
           <GridItem pl='2' area={'queryTable'} overflow="scroll" display="flex" 
           justifyContent="center" alignItems="center" flexDirection="column" margin="10px">
-            <QueryResultDisplay queryResultRes={queryResultRes} loading={queryResultLoading}/>
+            <QueryResultDisplay queryResultRes={queryResultRes} loading={queryResultLoading} opHeadings={opHeadings}/>
           </GridItem>
         </Grid>
   )

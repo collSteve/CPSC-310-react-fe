@@ -8,9 +8,10 @@ import ResultTableComponent, { ValidQueryResult } from "./result-table";
 export interface QueryResultDisplayProps {
     queryResultRes: QueryResponseResult | {type: InitQueryResult};
     loading?: boolean;
+    opHeadings?: string[];
 }
 
-export default function QueryResultDisplay({queryResultRes, loading}: QueryResultDisplayProps) {
+export default function QueryResultDisplay({queryResultRes, loading, opHeadings}: QueryResultDisplayProps) {
     let content = (<img src={catIdleGif} alt="waiting for input"/>);
 
     if (loading) {
@@ -18,7 +19,7 @@ export default function QueryResultDisplay({queryResultRes, loading}: QueryResul
     }
     else if (queryResultRes.type == ResponseStatus.Success) {
         const queryData = queryResultRes.data as ValidQueryResult;
-        content = (<ResultTableComponent data={queryData}/>)
+        content = (<ResultTableComponent data={queryData} opHeadings={opHeadings}/>)
     } else if (queryResultRes.type == ResponseStatus.Error) {
         const errorMessage = queryResultRes.data as string;
 

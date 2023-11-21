@@ -4,10 +4,16 @@ export type ValidQueryResult = { [key: string]: string | number }[];
 
 export interface ResultTableProps {
     data: ValidQueryResult;
+    opHeadings?: string[];
 }
 
-export default function ResultTableComponent({ data }: ResultTableProps) {
-    const headings = Object.keys(data[0]);
+export default function ResultTableComponent({ data, opHeadings }: ResultTableProps) {
+    let headings: string[] = [];
+    if  (data[0]) {
+        headings = Object.keys(data[0]);
+    } else if (opHeadings) {
+        headings = opHeadings;
+    }
     return (<TableContainer overflowY="scroll" overflowX="scroll" maxHeight="100%">
         <Table variant='simple'>
             <Thead bg="teal.100">

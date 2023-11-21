@@ -26,7 +26,7 @@ export default function ColumnComponent({ columnsList, onChange }: ColumnProps) 
         <h2 style={{ alignSelf: "start" }}>Columns</h2>
         <Box w="90%" display="flex" flexDirection="row" justifyContent="start" flexWrap="wrap">
             {columnsList.map((column, index) => {
-                return (<RemovableItem item={column} onClickRemove={() => {
+                return (<RemovableItem key={index} item={column} onClickRemove={() => {
                     const newColumnsList = [...columnsList];
                     newColumnsList.splice(index, 1);
                     onChange(newColumnsList);

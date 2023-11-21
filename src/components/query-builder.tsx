@@ -9,7 +9,10 @@ import OptionComponent, { OrderObj, OrderType } from "./query-builder/options";
 
 export interface QueryBuilderProps {
     datasetContextValue: DataSetContextType;
-    onQuerySubmit: (res: QueryResponseResult) => void;
+    onQuerySubmit: (res: QueryResponseResult, query?:{
+        "WHERE": WhereQuery,
+        "OPTIONS": OptionQuery
+    }) => void;
     beforeQuerySubmit?: () => void;
 }
 
@@ -47,9 +50,10 @@ export default function QueryBuilder({ datasetContextValue, onQuerySubmit, befor
             const query = {
                 "WHERE": adeptWhereQueryItem2EBNF(whereQuery),
                 "OPTIONS": adeptOptions2EBNF(option)
-            }
+            };
             submitQuery(query).then((res) => {
-                onQuerySubmit(res);
+                console.log("query result", res)
+                onQuerySubmit(res, query);
             })
         }}>Sumbit</Button>
     </Flex>);
