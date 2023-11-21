@@ -25,7 +25,7 @@ export default function QueryResultDisplay({queryResultRes, loading}: QueryResul
         content = (<Button as="div" colorScheme="red">{errorMessage}</Button>)
     }
 
-    return (<Box h="100%" display="flex" justifyContent="center" alignItems="center">
+    return (<Box display="flex" justifyContent="center" alignItems="center" maxHeight="100%" maxWidth="100%">
         {content}   
     </Box>)
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, VStack, Radio, RadioGroup, Alert, Text, Stack } from '@chakra-ui/react';
+import { Button, Input, VStack, Radio, RadioGroup, Alert, Text, Stack, Flex } from '@chakra-ui/react';
 import {addDataset} from "../service/adddataset-api.ts";
 import {ResponseStatus} from "../service/api-consts.ts";
 
@@ -32,7 +32,7 @@ function AddDatasetComponent() {
             setError('File is required');
             return;
         }
-        let res = await addDataset(datasetName, await selectedFile.arrayBuffer(), toggleValue).then((res) => {
+        const res = await addDataset(datasetName, await selectedFile.arrayBuffer(), toggleValue).then((res) => {
             if (res.type === ResponseStatus.Success) {
                 console.log("add dataset success");
                 return true;
@@ -57,22 +57,24 @@ function AddDatasetComponent() {
     };
 
     return (
-        <VStack spacing={4} border="4px solid" borderColor="gray.200" borderRadius="md">
-            <Button as="label" htmlFor="file-upload">
-                Upload Dataset
-            </Button>
+        <VStack spacing={3} border="4px solid" borderColor="gray.200" borderRadius="md" alignItems="stretch" >
+            <Flex flexDirection="row" justifyContent="space-around">
+                <Button as="label" htmlFor="file-upload">
+                    Upload Dataset
+                </Button>
+                <Button onClick={handleSubmit}>Submit</Button>
+            </Flex>
             {selectedFile && <Text>Selected file: {selectedFile.name}</Text>}
             <Input type="file" id="file-upload" onChange={handleFileChange} style={{ display: 'none' }} />
             <Input placeholder="Dataset Name" value={datasetName} onChange={handleNameChange} />
             <RadioGroup onChange={setToggleValue} value={toggleValue}>
-                <Stack direction="row" spacing={4}>
+                <Stack direction="row" spacing={4} justifyContent="space-around">
                     <Radio value="sections">Sections</Radio>
                     <Radio value="rooms">Rooms</Radio>
                 </Stack>
             </RadioGroup>
             {error && <Alert status="error">{error}</Alert>}
             {success && <Alert status="success">{success}</Alert>}
-            <Button onClick={handleSubmit}>Submit</Button>
         </VStack>
     );
 }

@@ -26,14 +26,16 @@ export default function DatasetDropdownComponent({selectedDatasetContext, setSel
                 console.log(res);
                 if (res.type === ResponseStatus.Success && res.data && typeof res.data !== "string") {
                     const insight_datasets = res.data as InsightDataset[];
+                    const newDatasetContexts: DataSetContextType[] = [];
                     insight_datasets.forEach((dataset) => {
                         if (dataset.kind == "sections") {
-                            setDatasetContexts([...datasetContexts, {type: DataSetType.Sections, datasetPrefix: dataset.id}]);
+                            newDatasetContexts.push({type: DataSetType.Sections, datasetPrefix: dataset.id});
                         }
                         else if (dataset.kind == "rooms") {
-                            setDatasetContexts([...datasetContexts, {type: DataSetType.Rooms, datasetPrefix: dataset.id}]);
+                            newDatasetContexts.push({type: DataSetType.Rooms, datasetPrefix: dataset.id});
                         }
                     });
+                    setDatasetContexts(newDatasetContexts);
                 } else {
                     setDatasetContexts([]);
                 }
@@ -47,7 +49,7 @@ export default function DatasetDropdownComponent({selectedDatasetContext, setSel
     return (
         <Flex flexDirection="row" style={{fontWeight: 'bold'}}>
             <InputGroup>
-                <InputLeftAddon children={"Selected Dataset for Querying:"} />
+                <InputLeftAddon children={"Select Dataset:"} />
                 <Select placeholder='choose a dataset to query from'
                         width="fit-content"
                         value={selectedDatasetContext.datasetPrefix}

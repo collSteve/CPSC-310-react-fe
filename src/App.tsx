@@ -23,11 +23,10 @@ function App() {
   return (
         <Grid
             templateAreas={`
-                  "uploadQuery empty"
-                  "QuerySelect empty"
-                  "querybuilder queryTable"
+                  "uploadQuery queryTable"
+                  "QuerySelect queryTable"
                   "querybuilder queryTable"`}
-            gridTemplateRows={'10vh 20vh 65 vh'}
+            gridTemplateRows={'30vh 10vh 59vh'}
             gridTemplateColumns={'49vw 49vw'}
             gap='1'
             color='blackAlpha.700'
@@ -35,7 +34,7 @@ function App() {
             minHeight={'100vh'}
             w={'100vw'}
         >
-          <GridItem area={'uploadQuery'}>
+          <GridItem area={'uploadQuery'} overflow="scroll">
             <AddDatasetComponent />
           </GridItem>
           <GridItem area={'QuerySelect'} justifyItems="center" alignSelf="center">
@@ -54,8 +53,8 @@ function App() {
                             setQueryResultLoading(false);
                           }}/>
           </GridItem>
-          <GridItem pl='2' area={'queryTable'}>
-            {/* <ResultTableComponent data={mockData}/> */}
+          <GridItem pl='2' area={'queryTable'} overflow="scroll" display="flex" 
+          justifyContent="center" alignItems="center" flexDirection="column" margin="10px">
             <QueryResultDisplay queryResultRes={queryResultRes} loading={queryResultLoading}/>
           </GridItem>
         </Grid>
